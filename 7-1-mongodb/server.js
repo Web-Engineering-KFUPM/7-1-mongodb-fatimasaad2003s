@@ -169,23 +169,40 @@
 
 import mongoose from "mongoose";
 
-// establish connection
+mongoose.connect("mongodb+srv://abc:Aabbcc123@cluster0.luz8gd7.mongodb.net/?retryWrites=true&w=majority")
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.error(err));
 
+const studentSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  major: String
+});
+const Student = mongoose.model("Student", studentSchema);
 
-// define schema
+async function createStudents() {
+  await Student.insertMany([
+    { name: "Ali", age: 21, major: "CS" },
+    { name: "Sara", age: 23, major: "SE" }
+  ]);
+  console.log("✅ Inserted");
+}
+createStudents();
 
+async function readStudents() {
+  const all = await Student.find();
+  console.log(all);
+}
+readStudents();
 
-// create document
+async function updateStudent() {
+  await Student.updateOne({ name: "Ali" }, { age: 22 });
+  console.log("✅ Updated Ali");
+}
+updateStudent();
 
-
-// read document
-
-
-// update document
-
-
-// delete document
-
-
-
-
+async function deleteStudent() {
+  await Student.deleteOne({ name: "Sara" });
+  console.log("✅ Deleted Sara");
+}
+deleteStudent();
